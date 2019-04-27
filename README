@@ -1,0 +1,43 @@
+高级质控
+
+依赖的R包：
+library(data.table)
+library(ggplot2)
+library(stats)
+library(RColorBrewer)
+library(VennDiagram)
+library(Cairo)
+配置文件：
+101.254.142.149:/disk/ftp/pub/AdvanceQC/chr_pos_cosmic_value_Substition_noheader_sort_ann_apart_peopleNum.txt
+101.254.142.149:/disk/ftp/pub/AdvanceQC/tcga_mc3_SNP_sort_ann_new_apart.txt
+列子：
+106.2.23.254
+Rscript gvcAdvancedQC.R /disk/fushun/Project/GVC_train/GVCQC_beirui_5_11_simp/data/BR0504.empirical.Somatic.WES.snv.simp /disk/fushun/Project/GVC_train/GVCQC_beirui_5_11_simp/data/BR0504.grig.Somatic.WES.snv.simp /disk/fushun/Project/GVC_train/GVCQC_beirui_5_11_simp/data/BR0504.xgboost.Somatic.WES.snv.simp 2 /disk/fushun/Project/GVCAdvancedQC_5_15/code/ 100 LUAD emp,grig,xgboost /disk/fushun/Project/GVCAdvancedQC_5_15/test11
+参数：
+$1: sample mutation list1
+$2: sample mutation list2
+$3: sample mutation list3
+$4: answer num
+$5: code dir
+$6 depth num
+$7 cancer name 
+$8 sample names(sample1,sample2,sample3)
+$9 output dir
+注意：
+sample list 文件是simp pup注释后的文件，可以参照pup_to_simp.sh 将pup转成这个输入文件。
+至少有一个sample mutation list 文件，有几个sample_mutation_list 就给几个sample name。
+answer num 是指突变文件至少有几个文件支持作为答案（如3个文件，至少2个文件支持的作为答案）。
+code dir 是为了读取后代码一个目录下的TCGA和COSMIC库文件，应用前需要从ftp下载。
+depth num 是在TCGA某癌症的所有病人中，挑选相应depth的病人。
+sample name是如果有多个文件已逗号分隔给名字。
+cancer name 是TCGA中的癌症名，包括：LUAD,LUSC,COADREAD,GBMLGG,STAD,ESCA,STES,BRCA,OV,PRAD,BLCA,LIHC,KIPAN,PAAD,HNSC,SARC,UCEC,SKCM,MESO,THCA,THYM,CESC,UCS 。
+
+### 多样本高级质控结果查看Patient_exonic_mut_num,Patient_1KG_MAF_ALL_Num_rate,Patient_rsID_rate,Patient_NoSy_num,Patient_nosy_sy_rate 在TCGA中的分布。
+参数：
+-p: 一些样本高级质控结果文件合并到一起的文件。
+-t: TCGA 背景库配置文件。
+-c: 癌症名。
+-s: sample名。
+-o: 输出目录。
+Rscript mulSampleGvcAdvancedQC.R -p /disk/fushun/Project/GVCAdvancedQC_5_15/test11/all.result.value.txt -t tcga_mc3_SNP_sort_ann_new_apart.txt -c LUAD -s test3 -o /disk/fushun/Project/GVCAdvancedQC_5_15/test11/
+
